@@ -19,7 +19,7 @@ cd reddit-analyser
 
 ## Configuração
 
-1. Crie um virtual environment:
+1. Crie um virtual environment (recomendado python 3.12):
    
    ```
    python -m venv venv
