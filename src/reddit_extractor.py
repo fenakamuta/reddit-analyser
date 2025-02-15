@@ -22,6 +22,21 @@ def get_reddit_client():
 
 
 def get_hot_news(n_posts=10):
+    """
+    Obtém os posts mais populares (hot) do subreddit 'news' e retorna uma lista contendo
+    informações relevantes de cada post.
+
+    Parâmetros:
+        n_posts (int): Número máximo de posts a serem retornados. Valor padrão é 10.
+
+    Retorna:
+        list: Uma lista de dicionários, onde cada dicionário possui as seguintes chaves:
+              - 'title': título do post.
+              - 'url': URL do post.
+              - 'score': pontuação do post.
+              - 'text': conteúdo textual do post, se disponível.
+              - 'comments': número de comentários no post.
+    """
     reddit = get_reddit_client()
     subreddit = reddit.subreddit("news")
     posts_response = subreddit.hot(limit=n_posts)

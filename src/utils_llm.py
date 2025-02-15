@@ -5,6 +5,18 @@ openai_client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
 
 def classify_sentiment(text):
+    """
+    Classifica o sentimento de um texto utilizando um modelo de linguagem.
+
+    Parâmetros:
+        text (str): Texto que será analisado para determinar seu sentimento.
+
+    Retorna:
+        str: Um dos valores 'Positivo', 'Neutro' ou 'Negativo', correspondendo ao sentimento detectado.
+
+    Exceções:
+        Poderão ser lançadas exceções relacionadas à comunicação com a API do OpenAI.
+    """
     completion = openai_client.chat.completions.create(
         model="o1-mini",
         messages=[
@@ -18,6 +30,15 @@ def classify_sentiment(text):
 
 
 def summarize_news(posts):
+    """
+    Gera um resumo em poucas linhas a partir de uma lista de notícias.
+
+    Parâmetros:
+        posts (list): Lista de dicionários, onde cada dicionário representa uma notícia com as chaves 'title' e 'text'.
+
+    Retorna:
+        str: Resumo gerado pelo modelo de linguagem, combinando os títulos e textos das notícias.
+    """
     text = "\n".join([f"{post['title']}: {post['text']}" for post in posts])
     completion = openai_client.chat.completions.create(
         model="o1-mini",
@@ -32,6 +53,15 @@ def summarize_news(posts):
 
 
 def get_keyword(text):
+    """
+    Extrai as principais palavras-chave de um texto utilizando o modelo "o1-mini" da API OpenAI.
+
+    Parâmetros:
+        text (str): Texto de entrada que será encapsulado entre as tags <text> e </text> para extração das palavras-chave.
+
+    Retorna:
+        str: Uma string contendo as principais palavras-chave extraídas do texto.
+    """
     completion = openai_client.chat.completions.create(
         model="o1-mini",
         messages=[
