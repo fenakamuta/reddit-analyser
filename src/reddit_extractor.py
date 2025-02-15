@@ -52,7 +52,7 @@ def get_hot_news(n_posts=10):
     ]
 
 
-def search_posts_by_text(search_text, n_posts=10):
+def search_posts_by_text(search_text, n_posts=10, llm_option="o1-mini"):
     """
     Retorna uma lista de posts do Reddit baseados na consulta de texto fornecida.
     Parâmetros:
@@ -78,8 +78,10 @@ def search_posts_by_text(search_text, n_posts=10):
             "score": post.score,
             "text": post.selftext,
             "comments": post.num_comments,
-            "sentiment": classify_sentiment(f"{post.title}\n{post.selftext}"),
-            "keywords": get_keyword(f"{post.title}\n{post.selftext}"),
+            "sentiment": classify_sentiment(
+                f"{post.title}\n{post.selftext}", llm_option
+            ),
+            "keywords": get_keyword(f"{post.title}\n{post.selftext}", llm_option),
         }
         for post in posts_response
     ]

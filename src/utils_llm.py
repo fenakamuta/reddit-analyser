@@ -1,10 +1,19 @@
 import os
+from groq import Groq
 from openai import OpenAI
 
-openai_client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+
+llm_clients = {
+    "o1-mini": OpenAI(api_key=os.environ.get("OPENAI_API_KEY")),
+    "deepseek-r1-distill-llama-70b-specdec": Groq(
+        api_key=os.environ.get("GROC_API_KEY")
+    ),
+    "llama-3.1-8b-instant": Groq(api_key=os.environ.get("GROC_API_KEY")),
+    "llama-3.3-70b-versatile": Groq(api_key=os.environ.get("GROC_API_KEY")),
+}
 
 
-def classify_sentiment(text):
+def classify_sentiment(text, llm_option="o1-mini"):
     """
     Classifica o sentimento de um texto utilizando um modelo de linguagem.
 
@@ -17,8 +26,9 @@ def classify_sentiment(text):
     Exceções:
         Poderão ser lançadas exceções relacionadas à comunicação com a API do OpenAI.
     """
-    completion = openai_client.chat.completions.create(
-        model="o1-mini",
+
+    completion = llm_clients[llm_option].chat.completions.create(
+        model=llm_option,
         messages=[
             {
                 "role": "user",
@@ -29,7 +39,7 @@ def classify_sentiment(text):
     return completion.choices[0].message.content
 
 
-def summarize_news(posts):
+def summarize_news(posts, llm_option="o1-mini"):
     """
     Gera um resumo em poucas linhas a partir de uma lista de notícias.
 
@@ -40,8 +50,8 @@ def summarize_news(posts):
         str: Resumo gerado pelo modelo de linguagem, combinando os títulos e textos das notícias.
     """
     text = "\n".join([f"{post['title']}: {post['text']}" for post in posts])
-    completion = openai_client.chat.completions.create(
-        model="o1-mini",
+    completion = llm_clients[llm_option].chat.completions.create(
+        model=llm_option,
         messages=[
             {
                 "role": "user",
@@ -52,7 +62,7 @@ def summarize_news(posts):
     return completion.choices[0].message.content
 
 
-def get_keyword(text):
+def get_keyword(text, llm_option="o1-mini"):
     """
     Extrai as principais palavras-chave de um texto utilizando o modelo "o1-mini" da API OpenAI.
 
@@ -62,8 +72,8 @@ def get_keyword(text):
     Retorna:
         str: Uma string contendo as principais palavras-chave extraídas do texto.
     """
-    completion = openai_client.chat.completions.create(
-        model="o1-mini",
+    completion = llm_clients[llm_option].chat.completions.create(
+        model=llm_option,
         messages=[
             {
                 "role": "user",
