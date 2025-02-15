@@ -38,3 +38,36 @@ def common_verificacao_api_token(api_token: int):
             status_code=401,
             detail="Token inválido",
         )
+
+
+def summarize_posts(posts):
+    """
+    Realiza a sumarização dos posts, calculando contagens de sentimentos, agregando palavras-chave e somando os scores dos posts.
+
+    Parâmetros:
+        posts (list[dict]): Lista de dicionários representando os posts. Cada dicionário deve conter as chaves:
+            - "sentiment": string que pode ser "Positivo", "Negativo" ou "Neutro".
+            - "keywords": valor representativo das palavras-chave associadas ao post.
+            - "score": valor numérico (ou string numérica) que representa o score do post.
+
+    Retorna:
+        dict: Um dicionário contendo os seguintes itens:
+            - "positive" (int): Número de posts com sentimento "Positivo".
+            - "negative" (int): Número de posts com sentimento "Negativo".
+            - "neutro" (int): Número de posts com sentimento "Neutro".
+            - "keywords" (list): Lista com os valores das chaves "keywords" de cada post.
+            - "score_total" (int): Soma total dos scores dos posts, após conversão para inteiro.
+    """
+    positive = len([post for post in posts if post["sentiment"] == "Positivo"])
+    negative = len([post for post in posts if post["sentiment"] == "Negativo"])
+    neutro = len([post for post in posts if post["sentiment"] == "Neutro"])
+    keywords = [post["keywords"] for post in posts]
+    score_total = sum([int(post["score"]) for post in posts])
+
+    return {
+        "positive": positive,
+        "negative": negative,
+        "neutro": neutro,
+        "keywords": keywords,
+        "score_total": score_total,
+    }
