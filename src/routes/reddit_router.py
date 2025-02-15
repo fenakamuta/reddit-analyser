@@ -1,11 +1,13 @@
 from dotenv import load_dotenv
+from utils_general import get_logger
+from utils_llm import summarize_news
 from fastapi import APIRouter, HTTPException
 from reddit_extractor import search_posts_by_text, get_hot_news
-from utils_llm import summarize_news
 
 
 load_dotenv()
 router = APIRouter()
+logger = get_logger()
 
 
 def summarize_posts(posts):
@@ -27,11 +29,14 @@ def summarize_posts(posts):
 @router.post("/get_sentiment")
 def analyze_sentiment(text: str, n_posts: int):
     if n_posts > 20:
+        logger.error(f"Erro ao buscar posts sobre {text}.")
         raise HTTPException(
             status_code=400,
             detail="O tamanho do número de posts está muito grande.",
         )
     posts = search_posts_by_text(text, n_posts)
+    logger.info(f"Posts recebidos com sucesso.")
+
     return summarize_posts(posts)
 
 
@@ -43,9 +48,5 @@ def analyze_news(n_posts: int):
             detail="O tamanho do número de posts está muito grande.",
         )
     news = get_hot_news(n_posts)
+    logger.info(f"Posts recebidos com sucesso.")
     return summarize_news(news)
-
-
-if __name__ == "__main__":
-    text = input("type the text: ")
-    print(get_posts(text))

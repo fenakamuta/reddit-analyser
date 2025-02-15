@@ -2,6 +2,7 @@ import os
 import praw
 from utils_llm import classify_sentiment, get_keyword
 
+
 def get_reddit_client():
     """
     Retorna uma instância do cliente do Reddit.
